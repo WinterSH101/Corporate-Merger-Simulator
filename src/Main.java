@@ -16,8 +16,23 @@ public class Main {
         market.add(new Company("LexCorp", 35000));
         market.add(new Company("InGen", 2000));
 
+        Company smallest = market.poll();
+        System.out.println("Smallest company: " + smallest);
+        market.add(smallest);
+
         int mergerCount  = 0;
-        while (market.size() >= 2) {
+        int titanThreshold = 50000;
+        Company titan = null;
+
+        for (Company company : market) {
+            if (company.size >= titanThreshold) {
+                titan = company;
+                break;
+            }
+        }
+        System.out.println("\nStarting Merger Simulation...\n");
+
+        while (market.size() >= 2 && titan == null) {
             Company companyA = market.poll();
             Company companyB = market.poll();
 
@@ -31,7 +46,21 @@ public class Main {
             mergerCount++;
 
             System.out.println("MERGER:" + companyA.name + "and" + companyB.name + "have merged into " + newName+ "with size" + newSize + "!");
+
+            if (newSize >= titanThreshold) {
+                titan = mergedCompany;
+                System.out.println("\nIndustry Titan has merged!");
+            }
         }
+        System.out.println("\n===== Final Report =====");
+
+        if  (titan != null) {
+            System.out.println("Industry Titan: " + titan);
+        } else {
+            System.out.println("No titan has merged.");
+        }
+
         System.out.println("Total Mergers: " + mergerCount);
+        System.out.println("Companies remaining: " + market.size());
     }
 }
